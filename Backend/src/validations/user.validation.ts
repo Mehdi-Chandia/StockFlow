@@ -1,5 +1,5 @@
 import {email, z} from 'zod'
-import { UserRole } from "../models/user.model.js"
+import { UserRole } from "../enums/user.enum.js"
 
 
 export const registerUserSchema=z.object({
@@ -10,4 +10,12 @@ export const registerUserSchema=z.object({
     warehouse: z.string()
     
 })
+
+
+export const loginSchema=z.object({
+    email: z.email().toLowerCase(),
+    password:z.string().min(8).max(100)
+})
+
+
 

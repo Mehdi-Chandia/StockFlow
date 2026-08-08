@@ -17,19 +17,19 @@ const generateAdmin= async () => {
         const adminLastName=process.env.ADMIN_LAST_NAME!
 
         await connectToDb();
-        
-        let hashPassword=await bcrypt.hash(adminPassword,10)
-
 
         const isAdminExist=await User.findOne({
             role:UserRole.ADMIN
         })
-
+        
+        
         if (isAdminExist) {
             throw new Error("admin already exists")
-        
+            
         }
         
+        let hashPassword=await bcrypt.hash(adminPassword,10)
+
           await User.create({
             firstName:adminFirstName,
             lastName:adminLastName,

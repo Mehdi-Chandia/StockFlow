@@ -16,10 +16,10 @@ interface IUser{
     createdBy?:mongoose.Types.ObjectId;
     lastLogin?:Date;
     avatar?:string;
-    resetPasswordToken?:string;
-    otpCode?:string;
-    otpExpiresIn?:Date;
-    resetPasswordExpiresIn?:Date;
+    resetPasswordToken?:string | null;
+    otpCode?:string | null;
+    otpExpiresIn?:Date | null;
+    resetPasswordExpiresIn?:Date | null;
     createdAt?:Date;
     updatedAt?:Date
 }
