@@ -53,3 +53,21 @@ the interfaces and the generics and then the types of different packages like mo
 **Challenges:** Today i learned few more things about why TS is good for development i was writing the function ot verify token then adding the user to req object but TS doesn't allow because there is no user in res object plain JS allows this because it modifies the objects globally without telling us but TS prevents this it says firs Modify the request object manually then use this. 
 
 ---
+
+
+### Day 4
+
+- Started with the testing of create User controller and it worked perfectly.
+- so now more than half of authentication is complete.
+- I added two more controllers for forgot password one will create a reset link and also generate a token and its expiry and save to db and then send that reset link to user via email
+- the second controller will receive that token and new password from user the token will come from the url the controller will validate the token and then password also checks the expiry time after all the validation it updates the password
+- for tokens i added a simple token which lives for 5 days but its not a good approach for production so now im moving to access and refresh token 
+- added two functions in utils to generate both tokens 
+- then in otpVerify controller instead of setting one token i set two tokens in cookies one access and other refresh token
+
+
+**In Progress:** The access and refresh token is in progress will complete it tomorrow 
+
+**Challenges:** No challenges but a new concept to learn. I never used access and refresh tokens concept before so its a new thing to learn 
+
+---

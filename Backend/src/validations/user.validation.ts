@@ -18,4 +18,8 @@ export const loginSchema=z.object({
 })
 
 
+export const resetPasswordSchema=z.object({
+    password:z.string().min(8).max(100),
+    confirmPassword:z.string().min(8).max(100)
+})
 

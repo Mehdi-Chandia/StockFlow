@@ -56,3 +56,20 @@ export function otpEmailTemplate({
     `;
 }
 
+export function resetPasswordTemplate(resetLink: string){
+    return `
+
+       <h2>StockFlow Password Reset Link!</h2>
+
+       <p>Your Reset Link</p>
+
+       <a href="${resetLink}">Click here to reset your password</a>
+    
+        <p>This link will expire in 10 minutes.</p>
+
+        <p>If you did not request this, please contact the administrator.</p>
+
+        <p>Regards,<br>StockFlow</p>
+    `
+}
+

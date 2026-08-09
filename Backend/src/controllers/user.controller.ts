@@ -3,6 +3,7 @@ import type { Request, Response } from "express";
 import {
   loginSchema,
   registerUserSchema,
+  resetPasswordSchema,
 } from "../validations/user.validation.js";
 import ApiError from "../utils/ApiError.js";
 import User from "../models/user.model.js";
@@ -13,9 +14,11 @@ import ApiResponse from "../utils/ApiResponse.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { generateOTP } from "../utils/generateOTP.js";
-import { otpEmailTemplate, welcomeEmailTemplate } from "../services/templates/email.templates.js";
+import { otpEmailTemplate, resetPasswordTemplate, welcomeEmailTemplate } from "../services/templates/email.templates.js";
 import { sendEmail } from "../services/email/email.service.js";
 import { log } from "node:console";
+import { generateForgotPasswordToken } from "../utils/generateforgotPasswordToken.js";
+import { generateAccessToken, generateRefreshToken } from "../utils/tokensGenerator.js";
 
 
 
@@ -86,7 +89,7 @@ export const createUser = AsyncHandler(async (req: Request, res: Response) => {
 
 export const loginUser = AsyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  console.log("request received ",email, password);
+  // console.log("request received ",email, password);
   
   const validate = loginSchema.safeParse({ email, password });
 
@@ -94,7 +97,7 @@ export const loginUser = AsyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(400, validate.error.message);
   }
 
-  console.log("validation passed");
+  // console.log("validation passed");
   
   const user = await User.findOne({ email });
 
@@ -102,7 +105,7 @@ export const loginUser = AsyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(400, "invalid email or password");
   }
 
- console.log("user found");
+//  console.log("user found");
  
 
   if (user.status !== UserStatus.ACTIVE) {
@@ -126,7 +129,7 @@ export const loginUser = AsyncHandler(async (req: Request, res: Response) => {
 //   generates the email template for otp verification
   let html=otpEmailTemplate({firstName: user.firstName, otp: OTPcode})
 
-  console.log("html generated ");
+  // console.log("html generated ");
   
 //   send the otp code to user's email
   await sendEmail({
@@ -177,24 +180,123 @@ export const verifyOTP = AsyncHandler(async (req: Request, res: Response) => {
   user.otpExpiresIn = null;
   await user.save();
 
-  const token = jwt.sign(
-    {
-      id: user._id,
-      email: user.email,
-      role: user.role,
-    },
-    process.env.JWT_SECRET!,
-    {
-      expiresIn: "1h",
-    },
-  );
+  const payload={
+    id: user._id.toString(),
+    email: user.email,
+    role: user.role
+  }
 
-  res.cookie("token", token, {
-    maxAge: 60 * 60 * 1000,
-    httpOnly: true,
-  });
+  const accessToken= generateAccessToken(payload)
+  const refreshToken= generateRefreshToken(payload)
+
+   res.cookie("access-token",accessToken,{
+    maxAge: 15 * 60 * 1000,
+    httpOnly: true
+  })
+
+    res.cookie("refresh-token",refreshToken,{
+    maxAge: 5 * 24 * 60 * 60 * 1000,
+    httpOnly: true
+  })
+
+  // const token = jwt.sign(
+  //   {
+  //     id: user._id,
+  //     email: user.email,
+  //     role: user.role,
+  //   },
+  //   process.env.JWT_SECRET!,
+  //   {
+  //     expiresIn: "1h",
+  //   },
+  // );
+
+  // res.cookie("token", token, {
+  //   maxAge: 60 * 60 * 1000,
+  //   httpOnly: true,
+  // });
 
   return res.status(200).json(
     new ApiResponse(200, "user logged in successfully", null)
   )
 });
+
+
+
+// forgot password handler
+
+export const forgotPassword= AsyncHandler(async (req:Request, res:Response)=>{
+  const {email} = req.body;
+
+  if (!email) {
+    throw new ApiError(400, "email is required ")
+  }
+
+  const user= await User.findOne({email})
+
+  if (!user) {
+    return res.json({message: "if email exists then reset link is sent"})
+  }
+
+  let token=generateForgotPasswordToken()
+  let expiry=new Date(Date.now() + 10 * 60 * 1000); // 10min
+
+  user.resetPasswordToken=token;
+  user.resetPasswordExpiresIn=expiry;
+  await user.save();
+
+  let resetLink= `${process.env.FRONTEND_URL}/reset-password/${token}`
+
+  let html= resetPasswordTemplate(resetLink);
+
+  // send the reset link to the user 
+  await sendEmail({
+    to:email, 
+    subject:"your reset password link", 
+    html:html
+  })
+
+  return res.status(200).json(
+    new ApiResponse(200, "reset link is sent ", null)
+  )
+})
+
+
+// reset password handler
+
+export const resetPassword= AsyncHandler(async (req:Request, res:Response)=>{
+  const{password, confirmPassword}= req.body;
+  const token= req.params;
+
+  const validate= resetPasswordSchema.safeParse({password, confirmPassword})
+
+    if (!validate.success) {
+    console.log(validate.error);
+    throw new ApiError(400, validate.error.message);
+  }
+
+  if (password !== confirmPassword) {
+    throw new ApiError(400, "password does not match ")
+  }
+
+  let user =await User.findOne({
+    resetPasswordToken:token,
+    resetPasswordExpiresIn: { $gt: Date.now() }
+  })
+
+  if (!user) {
+    throw new ApiError(400, "invalid or expired token")
+  }
+
+  let hashPassword= await bcrypt.hash(password, 10)
+
+  user.password=hashPassword;
+  user.resetPasswordToken=null;
+  user.resetPasswordExpiresIn=null;
+
+ await user.save();
+
+ return res.status(200).json(
+  new ApiResponse(200, "password updated successfully ", null)
+ )
+})
