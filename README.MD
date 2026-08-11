@@ -71,3 +71,23 @@ the interfaces and the generics and then the types of different packages like mo
 **Challenges:** No challenges but a new concept to learn. I never used access and refresh tokens concept before so its a new thing to learn 
 
 ---
+
+### Day 5
+
+- Finally wrapped up the Complete Authentication
+- finished the Access and Refresh token for now i was just doing like add two tokens after OTP is verified
+- But now i updated few things to make it like production level i added a new schema/model for refreshSession becasue i wanna use token rotation functionality
+- changed the refresh toeken generator function now it returns a new jti an unique id which i will use in refreh token controller for security purpose
+- now after otp and email is verified we generate two tokens add to cookies but before store the refresh token session in db
+- Added a new controller To refreh tokens now whenever the access token is expired frontend auto hits that refresh API it checks the refresh-token validate it and then revoke that token and create and add two new tokens and also add a new session doc for new refresh token 
+- added token rotation and token reuse detection i added a new field familyId in refreshSession
+now whenever user logs in this field is there inside session 
+- and now whenever refresh endpoint hits it will generate new tokens and add a new document of refreshSession but with same familyId because we will use that familyId whenever revoked token reuse detected we will revoke all the tokens with that particular familyId
+- added a changePassword controller and a logout cntroller when user logsOut we will also revoke the refresh token in db as well and clear both cookies.
+
+
+**In Progress:** Finally wrapped up the Auth flow a production level auth control
+
+**Challenges:** It was a great expereince to implement an Access and Refresh token control learned many new concepts in the process.
+
+---
