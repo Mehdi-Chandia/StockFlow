@@ -91,3 +91,19 @@ now whenever user logs in this field is there inside session
 **Challenges:** It was a great expereince to implement an Access and Refresh token control learned many new concepts in the process.
 
 ---
+
+
+### Day 1
+
+- Today i started with a new module as our user Auth module was completed, so today i started with wareHouse module
+- first of all design its DB structure and implement it
+- added its zod validation and a util file to generate unique code names for our wareHouses
+- added controllers like create wareHouse and getAll WH, update status or multiple fields
+- Define routes for these particular controllers, and only admin can access these routes
+
+
+
+**In Progress:** WareHouse module it was a short but very important module which i completed today.
+
+**Challenges:** Today i learned a few new things as well like that code generator and that regex to match in the DB
+---
