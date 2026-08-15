@@ -7,6 +7,7 @@ import { generateWHcode } from "../utils/generateWHcode.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { WareHouseStatus } from "../enums/warehouse.enum.js";
 import { set } from "mongoose";
+import { formatZodErrors } from "../utils/zodErrors.js";
 
 
 // create new WareHouse Handler
@@ -19,7 +20,9 @@ export const createWareHouse= AsyncHandler( async (req:Request, res:Response)=>{
     safeParse({name, email, phone, address, manager, city})
 
     if (!validation.success) {
-        throw new ApiError(400, validation.error.message)
+        const errors= formatZodErrors(validation.error)
+
+        throw new ApiError(400, "validation failed", errors)
     }
     const prefix = generateWHcode(city);
 
@@ -137,7 +140,9 @@ export const updateWareHouse= AsyncHandler( async (req:Request, res:Response)=>{
     const validate= updateWHschema.safeParse(req.body)
 
     if (!validate.success) {
-        throw new ApiError(400, "invalid fields")
+        const errors= formatZodErrors(validate.error)
+
+        throw new ApiError(400, "validation failed", errors)
     }
 
     const updatedWarehouse= await WareHouse.findByIdAndUpdate(

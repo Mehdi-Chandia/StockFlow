@@ -23,6 +23,7 @@ import { generateAccessToken, generateFamilyId, generateRefreshToken } from "../
 import type { jwtPayload } from "../enums/constants.js";
 import { email } from "zod";
 import RefreshSession from "../models/refreshSession.model.js";
+import { formatZodErrors } from "../utils/zodErrors.js";
 
 
 
@@ -40,8 +41,9 @@ export const createUser = AsyncHandler(async (req: Request, res: Response) => {
   });
 
   if (!validateBody.success) {
-    console.log(validateBody.error);
-    throw new ApiError(400, validateBody.error.message);
+    // console.log(validateBody.error);
+    let errors= formatZodErrors(validateBody.error)
+    throw new ApiError(400, "validation failed ", errors);
   }
 
   const isUserExists = await User.findOne({ email });
@@ -99,7 +101,8 @@ export const loginUser = AsyncHandler(async (req: Request, res: Response) => {
   const validate = loginSchema.safeParse({ email, password });
 
   if (!validate.success) {
-    throw new ApiError(400, validate.error.message);
+    const errors= formatZodErrors(validate.error)
+    throw new ApiError(400, "validation failed", errors);
   }
 
   // console.log("validation passed");
@@ -283,8 +286,10 @@ export const resetPassword= AsyncHandler(async (req:Request, res:Response)=>{
   const validate= resetPasswordSchema.safeParse({newPassword, confirmPassword})
 
     if (!validate.success) {
-    console.log(validate.error);
-    throw new ApiError(400, validate.error.message);
+    // console.log(validate.error);
+    const errors= formatZodErrors(validate.error)
+
+    throw new ApiError(400, "validation failed",errors);
   }
 
   if (newPassword !== confirmPassword) {
@@ -318,6 +323,7 @@ export const resetPassword= AsyncHandler(async (req:Request, res:Response)=>{
  )
 })
 
+//  refresh token
 
 export const refreshToken=AsyncHandler( async (req:Request, res: Response)=>{
   const refreshToken=req.cookies?.["refresh-token"]
@@ -471,7 +477,9 @@ export const changePassword= AsyncHandler( async (req: Request, res: Response)=>
   const validate= resetPasswordSchema.safeParse({newPassword, confirmPassword})
 
   if (!validate.success) {
-    throw new ApiError(400, validate.error.message)
+    const errors= formatZodErrors(validate.error)
+
+    throw new ApiError(400, "validation failed", errors)
   }
 
   if (newPassword !== confirmPassword) {

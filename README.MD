@@ -93,7 +93,7 @@ now whenever user logs in this field is there inside session
 ---
 
 
-### Day 1
+### Day 6
 
 - Today i started with a new module as our user Auth module was completed, so today i started with wareHouse module
 - first of all design its DB structure and implement it
@@ -106,4 +106,21 @@ now whenever user logs in this field is there inside session
 **In Progress:** WareHouse module it was a short but very important module which i completed today.
 
 **Challenges:** Today i learned a few new things as well like that code generator and that regex to match in the DB
+---
+
+### Day 7
+
+- Started with a new module the most important product module
+- added its schema and the zod validation
+- created two util functions one to generate sku for products and other to format zod errors
+- setup cloudinary and multer to handle the images of products
+- added the controllers for now i only added five controllers to create product, get all or single product
+update status and update all filds or few fields controller
+- added routes for particular controllers
+- added inventory model and its zod validation
+
+
+**In Progress:** Module three the product module is completed, and the inventory module is in its initial phase.
+
+**Challenges:** at first the cloudinary was giving error it was a credential error which i fixed and other issue was the zod it was giving weird errors so i fixed it by adding a function which formats those errors
 ---
