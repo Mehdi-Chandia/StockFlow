@@ -124,3 +124,19 @@ update status and update all filds or few fields controller
 
 **Challenges:** at first the cloudinary was giving error it was a credential error which i fixed and other issue was the zod it was giving weird errors so i fixed it by adding a function which formats those errors
 ---
+
+### Day 8
+
+- Moved to fourth module inventory 
+- started with the inventory controllers added createn Inventory, get inventory by product ID and get by
+warehouse ID and update status and reorder level
+- also added a special route to adjust quantity of inventory
+- added routes and tested them in postman
+- now moved to the most interesting module of this project the stock movement module
+- this module will log every movement of stock inside warehouse any product sold arrived or moved it will keep its record who moved it how much and why everything
+- added its schema and enums
+
+**In Progress:** Stock movement is in progress for now and this is the most interesting part of this project.
+
+**Challenges:** No challenges for now but learning a lot of new concepts.
+---

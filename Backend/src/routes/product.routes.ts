@@ -1,5 +1,5 @@
 import express from "express"
-import { verifyToken } from "../middlewares/verifyToken.middleware.js";
+import { verifyToken } from "../middlewares/auth.middleware.js";
 import { isAdmin } from "../middlewares/checkAdmin.middleware.js";
 import upload from "../middlewares/multer.middleware.js";
 import { createProduct, getProduct, listProducts, updateProduct, updateProductStatus } from "../controllers/product.controller.js";

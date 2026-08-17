@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { InventoryStatus } from "../enums/inventory.js";
+import { InventoryStatus } from "../enums/inventory.enum.js";
 
 interface IInventory{
     _id?: mongoose.Types.ObjectId,
@@ -39,6 +39,11 @@ const inventorySchema= new mongoose.Schema<IInventory>({
 
 })
 
+inventorySchema.index(
+    {productId: 1, warehouseId: 1},
+    {unique: true}
+)
 
-const Inventory= mongoose.model("Inventory", inventorySchema)
+
+const Inventory= mongoose.model<IInventory>("Inventory", inventorySchema)
 export default Inventory;

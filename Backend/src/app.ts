@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import userRoutes from "./routes/user.routes.js"
 import wareHouseRoutes from "./routes/wareHouse.routes.js"
 import productRoutes from "./routes/product.routes.js"
+import inventoryRoutes from "./routes/inventory.routes.js"
 
 const app: Express= express()
 
@@ -20,6 +21,9 @@ app.use("/api/user", userRoutes)
 app.use("/api/warehouse",wareHouseRoutes)
 // product routes handler
 app.use("/api/products", productRoutes)
+// inventory routes
+app.use("/api/inventory", inventoryRoutes)
+
 
 app.get("/", (req: Request, res: Response):void =>{
     res.send("hello from teach ware! ")

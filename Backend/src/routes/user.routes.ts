@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyToken } from "../middlewares/verifyToken.middleware.js";
+import { verifyToken } from "../middlewares/auth.middleware.js";
 import { isAdmin } from "../middlewares/checkAdmin.middleware.js";
 import { changePassword, createUser, forgotPassword, loginUser, logout, refreshToken, resetPassword, verifyOTP } from "../controllers/user.controller.js";
 const router= express();
