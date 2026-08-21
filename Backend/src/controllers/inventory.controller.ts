@@ -7,7 +7,8 @@ import Inventory from "../models/inventory.model.js";
 import { InventoryStatus } from "../enums/inventory.enum.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import StockMovement from "../models/stockMovement.model.js";
-import { StockMovementType } from "../enums/stockMov.enums.js";
+import { StockMovementReferenceType, StockMovementType } from "../enums/stockMov.enums.js";
+import createStockMovement from "../utils/stockMovement/stockMovement.util.js";
 
 
 // create inventory handler
@@ -202,6 +203,8 @@ export const adjustInventory= AsyncHandler(async (req:Request, res:Response)=>{
     }
 
     let updated= null;
+    let quantityBefore=null;
+    let quantityAfter=null;
 
     if (type === StockMovementType.IN) {
         updated = await Inventory.findByIdAndUpdate(
@@ -212,6 +215,10 @@ export const adjustInventory= AsyncHandler(async (req:Request, res:Response)=>{
                 }
             },{new: true}
     )
+        if (updated) {
+         quantityBefore= updated.quantity - quantity
+         quantityAfter= updated?.quantity;
+      }
     }else if (type === StockMovementType.OUT) {
         updated= await Inventory.findOneAndUpdate(
             {
@@ -224,6 +231,10 @@ export const adjustInventory= AsyncHandler(async (req:Request, res:Response)=>{
                 }
             },{new: true}
         )
+        if (updated) {
+            quantityBefore= updated.quantity +  quantity;
+            quantityAfter= updated.quantity;
+        }
     }else{
         throw new ApiError(400, "invalid adjust type")
     }
@@ -232,12 +243,27 @@ export const adjustInventory= AsyncHandler(async (req:Request, res:Response)=>{
         throw new ApiError(400, "insufficient quantity")
     }
 
+    if(quantityAfter === null || quantityBefore === null) {
+        throw new ApiError(400 ,"quantities are not calculated ")
+    }
+
     const data={
         productId: updated.productId,
-        
+        type: type,
+        movementQty: quantity,
+        warehouseId: updated.warehouseId,
+        quantityBefore: quantityBefore,
+        quantityAfter: quantityAfter,
+        performedBy: req.user?.id,
+        reason: reason,
+        referenceId: updated._id,
+        referenceType: StockMovementReferenceType.ADJUSTMENT
 
     }
 
+   let stockMovement= await createStockMovement(data)
+   console.log("stock movement created! ",stockMovement);
+   
     return res.status(200).json(
         new ApiResponse(200, "inventory adjusted successfully! ", updated)
     )

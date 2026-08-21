@@ -140,3 +140,20 @@ warehouse ID and update status and reorder level
 
 **Challenges:** No challenges for now but learning a lot of new concepts.
 ---
+
+
+### Day 9
+
+- Added the stock movement util function which logs every movement of stock inside or outside warehouse
+- tested the stock movement util func with the inventory adjust api
+- added some routes for stock movement three simple read routes and one dynamic route which filters on the basis of incoming query parameters
+- added pagination and filtering route with limits and page numbers handling 
+- moved to the orders module designed its schema and added its validation
+- wrote its first controller the create order controller its not just creating order its doing multiple 
+tasks fromm validating to checking the inventory then updating inventory and creating order and then in last creating stock movement
+
+
+**In Progress:** Order module is in progress
+
+**Challenges:** New concepts are always challenging pagination and filtering was new for me so it looked confusing at first but then i got the concept. Then the order creation controller it was doing lot of jobs not just one there were 4 DB collections were involved in this one controller.
+---

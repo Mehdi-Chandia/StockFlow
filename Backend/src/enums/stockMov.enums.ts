@@ -14,7 +14,7 @@ enum StockMovementType {
     TRANSFER = "TRANSFER"
 }
 
-enum StockMovementRefrenceType{
+enum StockMovementReferenceType{
     PURCHASE= "PURCHASE",
     ORDER= "ORDER",
     TRANSFER= "TRANSFER",
@@ -24,5 +24,5 @@ enum StockMovementRefrenceType{
 export {
     StockMovementType,
     StockMovementReason,
-    StockMovementRefrenceType
+    StockMovementReferenceType
 }

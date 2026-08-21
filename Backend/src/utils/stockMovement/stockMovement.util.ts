@@ -12,7 +12,7 @@ import StockMovement from "../../models/stockMovement.model.js";
 
     if (data.type === StockMovementType.TRANSFER) {
           if (!data.fromWareHouseId || !data.toWareHouseId) {
-            throw new Error("warehouse IDs not found")
+            throw new Error(" Transfer warehouse IDs not found")
          }
         newStockMovement= await StockMovement.create({
             productId: data.productId,
@@ -24,11 +24,19 @@ import StockMovement from "../../models/stockMovement.model.js";
             quantityAfter: data.quantityAfter,
             reason: data.reason,
             performedBy: data.performedBy,
-            refrenceType: data?.refrenceType || null,
-            referenceId: data?.referenceId || null,
+            ...(data.referenceType && {
+                referenceType: data.referenceType
+            }),
+
+            ...(data.referenceId && {
+                referenceId: data.referenceId
+            })
 
         })
     }else{
+        if (!data.warehouseId) {
+            throw new Error("warehouse id is not provided")
+        }
         newStockMovement= await StockMovement.create({
             productId: data.productId,
             type: data.type,
@@ -38,8 +46,13 @@ import StockMovement from "../../models/stockMovement.model.js";
             quantityAfter: data.quantityAfter,
             reason: data.reason,
             performedBy: data.performedBy,
-            refrenceType: data?.refrenceType || null,
-            referenceId: data?.referenceId || null,
+            ...(data.referenceType && {
+                referenceType: data.referenceType
+            }),
+
+            ...(data.referenceId && {
+                referenceId: data.referenceId
+            })
 
         })        
     }

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { StockMovementReason, StockMovementRefrenceType, StockMovementType } from "../enums/stockMov.enums.js";
+import { StockMovementReason, StockMovementReferenceType, StockMovementType } from "../enums/stockMov.enums.js";
 
 export interface IStockMovement{
     _id?: mongoose.Types.ObjectId,
@@ -13,7 +13,7 @@ export interface IStockMovement{
     quantityAfter: number,
     performedBy: mongoose.Types.ObjectId,
     reason: StockMovementReason,
-    refrenceType?: StockMovementRefrenceType,
+    referenceType?: StockMovementReferenceType,
     referenceId?: mongoose.Types.ObjectId,
     createdAt?: Date,
     updatedAt?: Date
@@ -68,9 +68,9 @@ const stockMovementSchema= new mongoose.Schema<IStockMovement>({
     referenceId:{
         type: mongoose.Schema.Types.ObjectId
     },
-    refrenceType:{
+    referenceType:{
         type: String,
-        enum: Object.values(StockMovementRefrenceType),
+        enum: Object.values(StockMovementReferenceType),
 
     },
 
