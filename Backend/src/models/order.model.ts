@@ -1,7 +1,7 @@
 import mongoose, { mongo, trusted } from 'mongoose'
 import { OrderStatus } from '../enums/order.enum.js'
 
-type orderType={
+export type orderType={
     productId: mongoose.Types.ObjectId,
     quantity: number,
     unitPrice: number,

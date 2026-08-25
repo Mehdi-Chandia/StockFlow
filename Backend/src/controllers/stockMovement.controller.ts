@@ -107,7 +107,6 @@ export const getMovement= AsyncHandler(async (req:Request, res:Response)=>{
 
 })
 
-
 // get the movement history of product
 export const getProductMovement= AsyncHandler(async (req:Request, res:Response)=>{
     const {productId}= req.params;
@@ -128,7 +127,6 @@ export const getProductMovement= AsyncHandler(async (req:Request, res:Response)=
    )
 
 })
-
 
 // get the movement history of warehouse
 export const getWareHouseMovement= AsyncHandler(async (req:Request, res:Response)=>{

@@ -23,7 +23,7 @@ import { generateAccessToken, generateFamilyId, generateRefreshToken } from "../
 import type { jwtPayload } from "../enums/constants.js";
 import { email } from "zod";
 import RefreshSession from "../models/refreshSession.model.js";
-import { formatZodErrors } from "../utils/zodErrors.js";
+import { formatZodErrors } from "../utils/formatZodErrors.js";
 
 
 

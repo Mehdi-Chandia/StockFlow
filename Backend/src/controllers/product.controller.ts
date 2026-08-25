@@ -2,12 +2,15 @@ import type { Request, Response } from "express";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
 import { productValidationSchema, updateProductValidationSchema } from "../validations/product.validaton.js";
 import ApiError from "../utils/ApiError.js";
-import { formatZodErrors } from "../utils/zodErrors.js";
+import { formatZodErrors } from "../utils/formatZodErrors.js";
 import { UploadToCloudinary } from "../utils/uploadToCloudinary.js";
 import { generateProductSku } from "../utils/generateSKU.js";
 import Product from "../models/product.model.js";
 import { ProductStatus } from "../enums/product.enum.js";
 import ApiResponse from "../utils/ApiResponse.js";
+import { createAuditLog } from "../utils/auditLog/createAuditLog.js";
+import { AuditEntityType } from "../enums/auditLog.enum.js";
+import { AuditAction } from "../enums/auditLog.enum.js";
 
 
 // create product handler
@@ -24,6 +27,7 @@ export const createProduct= AsyncHandler( async (req:Request, res:Response)=>{
             const errors= formatZodErrors(validation.error)
             throw new ApiError(400, "validation error",errors)
          }
+         
 
     const file= req.file
     console.log("file from multer ",file);
@@ -57,7 +61,7 @@ export const createProduct= AsyncHandler( async (req:Request, res:Response)=>{
         description,
         sku,
         purchasePrice,
-        sellPrice,
+        sellPrice:sellPrice,
         status: ProductStatus.ACTIVE,
         brand,
         minQty,
@@ -73,6 +77,16 @@ export const createProduct= AsyncHandler( async (req:Request, res:Response)=>{
     if (!newProduct) {
         throw new ApiError(400, "product creation failed")
     }
+
+    const auditLogData= {
+        action: AuditAction.CREATE,
+        entityType: AuditEntityType.PRODUCT,
+        entityId: newProduct._id,
+        performedBy: req.user.id,
+        reason: "product created"
+    }
+
+    await createAuditLog(auditLogData)
 
     return res.status(201).json(
         new ApiResponse(201, "Product created successfully", newProduct)
@@ -147,6 +161,22 @@ export const updateProductStatus= AsyncHandler( async (req:Request, res:Response
         throw new ApiError(400, "product status updation failed")
     }
 
+    const auditLogData= {
+        action: AuditAction.UPDATE,
+        entityType: AuditEntityType.PRODUCT,
+        entityId: product._id,
+        performedBy: req.user.id,
+        reason: "product status updated",
+        changes: {
+            status: {
+                old: status === ProductStatus.ACTIVE ? ProductStatus.INACTIVE : ProductStatus.ACTIVE,
+                new: status
+            }
+        }
+    }
+
+    await createAuditLog(auditLogData)
+
     return res.status(200).json(
         new ApiResponse(200, "status updated successfully", null)
     )
@@ -181,6 +211,16 @@ export const updateProduct= AsyncHandler(async (req:Request, res:Response)=>{
     if (!updatedProduct) {
         throw new ApiError(404, "no product found")
     }
+
+       const auditLogData= {
+        action: AuditAction.UPDATE,
+        entityType: AuditEntityType.PRODUCT,
+        entityId: updatedProduct._id,
+        performedBy: req.user.id,
+        reason: "product updated "
+    }
+
+    await createAuditLog(auditLogData)
 
     return res.status(200).json(
         new ApiResponse(200, "product updated successfully", updatedProduct)

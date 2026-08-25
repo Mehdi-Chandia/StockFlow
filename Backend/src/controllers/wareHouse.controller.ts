@@ -7,7 +7,7 @@ import { generateWHcode } from "../utils/generateWHcode.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { WareHouseStatus } from "../enums/warehouse.enum.js";
 import { set } from "mongoose";
-import { formatZodErrors } from "../utils/zodErrors.js";
+import { formatZodErrors } from "../utils/formatZodErrors.js";
 
 
 // create new WareHouse Handler

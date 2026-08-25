@@ -1,6 +1,6 @@
 # StockFlow
 
-
+Stock flow is an enterprise level warehouse and inventory management system..
 
 ## Daily Development Log
 
@@ -156,4 +156,27 @@ tasks fromm validating to checking the inventory then updating inventory and cre
 **In Progress:** Order module is in progress
 
 **Challenges:** New concepts are always challenging pagination and filtering was new for me so it looked confusing at first but then i got the concept. Then the order creation controller it was doing lot of jobs not just one there were 4 DB collections were involved in this one controller.
+
+---
+
+
+
+### Day 10
+
+- Added few more controllers of order module 
+- updated the create order controller added the mongoDB transactions in it. its an advance mongodb concept
+it states either all db operations suceed or all fails 
+- created the cancel order controller again it requires more than just updating the status whenever an order is cancelled we validate it gets its products quantity find inventories update inventory then create stock movements
+- also added pagination util function and used it in fetch all orders with pagination and filtering
+- after completing the order module added the invoices module it is related to orders
+- added its schema and created a util function and added it inside create order controller so whenver a new order is created an invoice will also be generated with it for the user 
+- added few controllers for invoices like get single invoice or get all by filtering
+- then started the audit logs module this module will log every action inside warehouse it is different from stock movements, movements were only for stock changing but the audit logs are for every action like new product or order or inventory created or updated or user blocked, this module will log it like what happen who did it and why and when 
+- added its schema and again a util function for audit logs as well because we will be using it in most of the other modules.
+
+
+**In Progress:** Audit logs module is in progress
+
+**Challenges:** mongoDB transaction an interesting concept of dbs, and it was easy and straight forward to implement, audit logs is also a new concept for me like keep the record if any activity or action happens in warehouse.
+
 ---

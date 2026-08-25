@@ -44,6 +44,10 @@ const productSchema=new mongoose.Schema<IProduct>({
         type: Number,
         required: true
     },
+    sellPrice:{
+        type: Number,
+        required: true
+    },
     minQty:{
         type: Number,
         required: true

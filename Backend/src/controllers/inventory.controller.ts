@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
 import { adjustInventorySchema, inventoryValidationSchema } from "../validations/inventory.validation.js";
-import { formatZodErrors } from "../utils/zodErrors.js";
+import { formatZodErrors } from "../utils/formatZodErrors.js";
 import ApiError from "../utils/ApiError.js";
 import Inventory from "../models/inventory.model.js";
 import { InventoryStatus } from "../enums/inventory.enum.js";
@@ -9,6 +9,8 @@ import ApiResponse from "../utils/ApiResponse.js";
 import StockMovement from "../models/stockMovement.model.js";
 import { StockMovementReferenceType, StockMovementType } from "../enums/stockMov.enums.js";
 import createStockMovement from "../utils/stockMovement/stockMovement.util.js";
+import { AuditAction, AuditEntityType } from "../enums/auditLog.enum.js";
+import { createAuditLog } from "../utils/auditLog/createAuditLog.js";
 
 
 // create inventory handler
@@ -45,6 +47,16 @@ export const createInventory= AsyncHandler(async (req:Request, res:Response)=>{
     if (!newInventory) {
         throw new ApiError(400, "error creating inventory")
     }
+
+    const auditLogData={
+        action: AuditAction.CREATE,
+        entityType: AuditEntityType.INVENTORY,
+        entityId: newInventory._id,
+        performedBy: req.user?.id,
+        reason: "inventory created"
+    }
+
+    await createAuditLog(auditLogData)
 
     return res.status(201).json(
         new ApiResponse(201, "inventory created successfully", newInventory)
@@ -132,22 +144,34 @@ export const updateReorderLevel= AsyncHandler( async (req:Request, res:Response)
     if (newReorderLevel < 0) {
         throw new ApiError(400, "reorder level can't be less than 0")
     }
+    const inventory = await Inventory.findById(inventoryId);
 
-    const inv= await Inventory.findByIdAndUpdate(
-        inventoryId,
-        {
-            $set:{
-                reorderlevel: newReorderLevel
-            }
-        }, {new: true}
-    )
-
-    if (!inv) {
-        throw new ApiError(404, "inventory not found")
+    if (!inventory) {
+    throw new ApiError(404, "inventory not found");
     }
 
+    const oldReorderLevel = inventory.reorderlevel;
+
+    inventory.reorderlevel = newReorderLevel;
+    await inventory.save();
+
+    const auditLogData = {
+        action: AuditAction.UPDATE,
+        entityType: AuditEntityType.INVENTORY,
+        entityId: inventory._id,
+        performedBy: req.user?.id,
+        reason: "reorder level updated",
+        changes:{
+            reorderlevel: {
+                old: oldReorderLevel,  
+                new: newReorderLevel
+            }
+        }
+    };
+        await createAuditLog(auditLogData);
+
     return res.status(200).json(
-        new ApiResponse(200, "reorder level updated!", inv)
+        new ApiResponse(200, "reorder level updated!", inventory)
     )
 
 })

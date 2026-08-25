@@ -1,4 +1,4 @@
-import {z} from "zod"
+import { z} from "zod"
 
 export const orderValidationSchema=z.object({
   customerName: z.string(),
@@ -7,3 +7,5 @@ export const orderValidationSchema=z.object({
   discount: z.number().positive()
     
 })
+
+
