@@ -180,3 +180,22 @@ it states either all db operations suceed or all fails
 **Challenges:** mongoDB transaction an interesting concept of dbs, and it was easy and straight forward to implement, audit logs is also a new concept for me like keep the record if any activity or action happens in warehouse.
 
 ---
+
+
+
+### Day 11
+
+- Started with injecting the audit log function inside different controllers to log different actions
+- added two controllers for audit log one to get single and other to get all with pagination and filtering
+- moved to the next module the purchase orders added its schema and validation
+- created its different controllers like create get all or cancel PO 
+- also injected the audit log function inside these controllers to log the actions
+- added the approve and update controllers and also added its routes and tested all the six controllers
+- then moved to next module the shipments which completes the PO
+- added its schema and zod validation.
+
+**In Progress:** Shipment's structure is in progress will start with its first controller tomorrow.
+
+**Challenges:** no challenges but new concepts i would say new experiences like transaction pagination filtering and indexes still lot of new things to learn in this project.
+
+---
