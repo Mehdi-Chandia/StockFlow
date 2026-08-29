@@ -203,6 +203,21 @@ export const updateInventoryStatus= AsyncHandler( async (req:Request, res:Respon
         throw new ApiError(404, "inventory not found")
     }
 
+    const auditLogData = {
+        action: AuditAction.UPDATE,
+        entityType: AuditEntityType.INVENTORY,
+        entityId: updated._id,
+        performedBy: req.user?.id,
+        reason: "inventory status updated",
+        changes:{
+            status: {   
+                old: newStatus === InventoryStatus.ACTIVE ? InventoryStatus.INACTIVE : InventoryStatus.ACTIVE,
+                new: newStatus
+            }
+        }
+    };
+    await createAuditLog(auditLogData);   
+
     return res.status(200).json(
         new ApiResponse(200, "status updated successfully!", updated)
     )
@@ -287,6 +302,21 @@ export const adjustInventory= AsyncHandler(async (req:Request, res:Response)=>{
 
    let stockMovement= await createStockMovement(data)
    console.log("stock movement created! ",stockMovement);
+
+   const auditLogData = {
+    action: AuditAction.UPDATE,
+    entityType: AuditEntityType.INVENTORY,
+    entityId: updated._id,
+    performedBy: req.user?.id,
+    reason: "inventory adjusted",
+    changes:{
+        quantity: {
+            old: quantityBefore,
+            new: quantityAfter
+        }
+    }
+};
+await createAuditLog(auditLogData);
    
     return res.status(200).json(
         new ApiResponse(200, "inventory adjusted successfully! ", updated)

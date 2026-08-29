@@ -83,7 +83,7 @@ const invoiceSchema= new mongoose.Schema<IInvoice>({
         required: true
     }
 
-})
+},{timestamps: true})
 
 invoiceSchema.index({
     warehouseId:1

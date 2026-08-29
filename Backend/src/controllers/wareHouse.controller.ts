@@ -8,6 +8,8 @@ import ApiResponse from "../utils/ApiResponse.js";
 import { WareHouseStatus } from "../enums/warehouse.enum.js";
 import { set } from "mongoose";
 import { formatZodErrors } from "../utils/formatZodErrors.js";
+import { createAuditLog } from "../utils/auditLog/createAuditLog.js";
+import { AuditAction, AuditEntityType } from "../enums/auditLog.enum.js";
 
 
 // create new WareHouse Handler
@@ -54,6 +56,16 @@ export const createWareHouse= AsyncHandler( async (req:Request, res:Response)=>{
         manager,
         createdBy:adminId
     })
+
+    const auditLogData={
+        action: AuditAction.CREATE,
+        entityType: AuditEntityType.WAREHOUSE,
+        entityId: newWareHouse._id,
+        performedBy: req.user?.id,
+        reason: "warehouse created"
+    }
+
+    await createAuditLog(auditLogData)
 
     return res.status(201).json(
         new ApiResponse(200, "wareHouse registered successfully", newWareHouse)
@@ -125,6 +137,20 @@ export const updateWHstatus= AsyncHandler( async (req:Request, res:Response)=>{
         {new: true}
     )
 
+    if (!wareHoue) {
+        throw new ApiError(404, "warehouse not found")
+    }
+
+    const auditLogData = {
+        action: AuditAction.UPDATE,
+        entityType: AuditEntityType.WAREHOUSE,
+        entityId: wareHoue?._id,
+        performedBy: req.user?.id,
+        reason: `warehouse status updated to ${status}`
+    }
+
+    await createAuditLog(auditLogData);
+
     return res.status(200).json(
         new ApiResponse(200, "status updated successfully", null)
     )
@@ -156,6 +182,16 @@ export const updateWareHouse= AsyncHandler( async (req:Request, res:Response)=>{
     if (!updatedWarehouse) {
     throw new ApiError(404, "warehouse not found");
    }
+
+   const auditLogData={
+    action: AuditAction.UPDATE,
+    entityType: AuditEntityType.WAREHOUSE,
+    entityId: updatedWarehouse._id,
+    performedBy: req.user?.id,
+    reason: "warehouse details updated"
+   }
+
+   await createAuditLog(auditLogData);
 
    return res.status(200).json(
     new ApiResponse(200, "wareHouse updated successfully", null)

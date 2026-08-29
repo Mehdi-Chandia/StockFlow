@@ -37,7 +37,7 @@ const inventorySchema= new mongoose.Schema<IInventory>({
         required: true
     }
 
-})
+},{timestamps: true})
 
 inventorySchema.index(
     {productId: 1, warehouseId: 1},

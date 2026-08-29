@@ -24,6 +24,8 @@ import type { jwtPayload } from "../enums/constants.js";
 import { email } from "zod";
 import RefreshSession from "../models/refreshSession.model.js";
 import { formatZodErrors } from "../utils/formatZodErrors.js";
+import { createAuditLog } from "../utils/auditLog/createAuditLog.js";
+import { AuditAction, AuditEntityType } from "../enums/auditLog.enum.js";
 
 
 
@@ -77,6 +79,10 @@ export const createUser = AsyncHandler(async (req: Request, res: Response) => {
     status: UserStatus.ACTIVE,
   });
 
+  if (!newUser) {
+    throw new ApiError(500, "error while creating user");
+  }
+
   const html=welcomeEmailTemplate({
     firstName: newUser.firstName,
     email: newUser.email,
@@ -85,6 +91,16 @@ export const createUser = AsyncHandler(async (req: Request, res: Response) => {
 })
 
     await sendEmail({to:email, subject:"Welcome to StockFlow! ", html})
+
+    const auditLogData = {
+      action: AuditAction.CREATE,
+      entityType: AuditEntityType.USER,
+      entityId: newUser._id,
+      performedBy: req.user?.id || "system",
+      reason: "New user created",
+    };
+
+    await createAuditLog(auditLogData);
 
   return res.status(201).json(
     new ApiResponse(201, "user created successfully", newUser)

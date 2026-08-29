@@ -456,6 +456,15 @@ export const updateOrderStatus = AsyncHandler(async (req: Request, res: Response
       throw new ApiError(404, "order not found")
     }
 
+    const auditLogData = {
+      action: AuditAction.UPDATE,
+      entityType: AuditEntityType.ORDER,
+      entityId: updatedOrder._id,
+      performedBy: req.user.id,
+      reason: `updated order status to ${status}`
+    }
+    await createAuditLog(auditLogData);
+
     return res.status(200).json(
         new ApiResponse(200, "order status updated successfully", updatedOrder)
     )

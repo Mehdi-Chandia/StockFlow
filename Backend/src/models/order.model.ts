@@ -89,7 +89,7 @@ const orderSchema= new mongoose.Schema<IOrder>({
         type: Number,
         required: true
     },    
-})
+},{timestamps: true})
 
 orderSchema.index({
     warehouseId: 1

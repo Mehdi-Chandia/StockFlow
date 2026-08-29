@@ -47,7 +47,7 @@ const auditLogSchema= new mongoose.Schema<IAuditLog>({
         type: mongoose.Schema.Types.Mixed
     }
 
-})
+},{timestamps: true})
 
 auditLogSchema.index({
     entityType: 1,

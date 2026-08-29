@@ -27,7 +27,6 @@ export const getInvoice= AsyncHandler(async (req:Request, res:Response)=>{
 
 
 // get the invoices with pagination and filtering
-
 export const getInvoices= AsyncHandler(async (req: Request, res: Response)=>{
     const {warehouseId, customerName, issuedBy, orderId}= req.query;
 

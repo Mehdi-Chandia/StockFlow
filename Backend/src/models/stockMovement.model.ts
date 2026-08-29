@@ -74,7 +74,7 @@ const stockMovementSchema= new mongoose.Schema<IStockMovement>({
 
     },
 
-})
+},{timestamps: true})
 
 
 const StockMovement= mongoose.model("StockMovement", stockMovementSchema)

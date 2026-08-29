@@ -15,4 +15,5 @@ export enum AuditEntityType {
     ORDER = "ORDER",
     INVOICE = "INVOICE",
     STOCK_MOVEMENT = "STOCK_MOVEMENT",
+    PURCHASE_ORDER = "PURCHASE_ORDER"
 }
