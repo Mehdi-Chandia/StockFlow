@@ -27,6 +27,11 @@ export const createProduct= AsyncHandler( async (req:Request, res:Response)=>{
             const errors= formatZodErrors(validation.error)
             throw new ApiError(400, "validation error",errors)
          }
+
+         const allowedCategories= ["ELECTRONICS", "FURNITURE", "TOOLS", "HARDWARE", "ELECTRICAL"];
+         if (!allowedCategories.includes(category)) {
+            throw new ApiError(400, "invalid categorey type")
+         }
          
 
     const file= req.file

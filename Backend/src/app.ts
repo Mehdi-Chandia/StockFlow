@@ -10,12 +10,15 @@ import orderRoutes from "./routes/order.routes.js"
 import stockMovementsRoutes from "./routes/stockMovements.routes.js"
 import auditLogRoutes from "./routes/auditLog.routes.js"
 import purchaseOrderRoutes from "./routes/purchaseOrder.routes.js"
+import shipmentRoutes from "./routes/shipment.routes.js"
+import { globalRateLimiter } from './middlewares/rateLimit.middleware.js'
 
 const app: Express= express()
 
 // built in middlewares 
 app.use(express.json({limit:'16kb'}))
 app.use(cookieParser()) 
+app.use(globalRateLimiter)
 
 
 // user route handler 
@@ -34,10 +37,16 @@ app.use("/api/stock-movements", stockMovementsRoutes)
 app.use("/api/audit-logs", auditLogRoutes)
 // purchase order routes
 app.use("/api/purchase-order", purchaseOrderRoutes)
+// shipment routes
+app.use("/api/shipment", shipmentRoutes)
 
 
 app.get("/health-check", (req: Request, res: Response):void =>{
     res.send("stock flow is running fine! ")
+})
+
+app.get("/", (req: Request, res: Response):void =>{
+    res.send("hello from stock flow! ")
 })
 
 app.use(errorHandler)

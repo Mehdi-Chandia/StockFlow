@@ -199,3 +199,25 @@ it states either all db operations suceed or all fails
 **Challenges:** no challenges but new concepts i would say new experiences like transaction pagination filtering and indexes still lot of new things to learn in this project.
 
 ---
+
+
+### Day 12
+
+- after adding the model and validation of shipment created its first controller
+- the receive shipment controller it doesn't just receive shipment but also validates it with the PO
+matches the quantities calculate usable and missing Qty check inventory update if exist create new one
+if inventory for any product not found
+- it also creates the stock movements and audit log and i also injected the mongoDB transaction in this controller
+- added two more controller like get single shipment by id and all by pagination and filtering
+- after that moved to the next module the suppliers module added its schema and validation
+- supplier are linked with purchase orders so whenever a new PO is created it will be linked with a supplier and also when a shipment is received it will be linked with that supplier as well
+- added few controllers for suppliers like create, get all, get single, update and update status
+and get all by filtering and pagination and injected the audit log function as well
+- added different rate limiters a global one for all routes and a specific one for login and otp verification and forgot password and reset password routes with different limits and time windows
+
+**In Progress:** so finally the version 1.0 of backend is completed and now i will move to the frontend part of this project which is also a huge part of this project. then will come back to backend and add more advance features. 
+
+**Challenges:** there were few challenges like the receive shipment controller was a bit complex because it was doing multiple jobs and also the mongoDB transaction was a new concept for me so it took some time to understand and implement it. but overall it was a great learning experience.
+I learned a lot of new things in this version of Backend like mongoDB transactions, pagination, filtering, indexes, rate limiting, audit logs, stock movements, and many more.
+
+---

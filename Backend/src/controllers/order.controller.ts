@@ -189,6 +189,7 @@ export const createOrder = AsyncHandler(async (req: Request, res: Response) => {
         productId: item.productId,
         type: StockMovementType.OUT,
         movementQty: item.quantity,
+        warehouseId,
         quantityBefore,
         quantityAfter,
         performedBy: req.user.id,

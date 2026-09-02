@@ -6,12 +6,13 @@ type shipmentItemtype={
     receivedQty: number,
     damagedQty: number,
     missingQty: number,
+    usableQty: number,
     note: string
 }
 
 interface IShipment{
     _id?: mongoose.Types.ObjectId,
-    shipmentId: string,
+    shipmentNumber: string,
     supplierId: mongoose.Types.ObjectId,
     purchaseOrderId: mongoose.Types.ObjectId,
     warehouseId: mongoose.Types.ObjectId,
@@ -23,7 +24,7 @@ interface IShipment{
 }
 
 const shipmentSchema= new mongoose.Schema<IShipment>({
-    shipmentId:{
+    shipmentNumber:{
         type: String,
         required: true
     },
@@ -70,6 +71,10 @@ const shipmentSchema= new mongoose.Schema<IShipment>({
             type: Number,
             required: true
           },
+          usableQty:{
+            type: Number,
+            required: true
+          },
           note:{
             type: String,
             required: true
@@ -80,7 +85,7 @@ const shipmentSchema= new mongoose.Schema<IShipment>({
         type: Date,
         required: true
     }
-})
+},{timestamps: true})
 
 const Shipment= mongoose.model<IShipment>("Shipment", shipmentSchema)
 export default Shipment;

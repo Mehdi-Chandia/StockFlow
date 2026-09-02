@@ -1,12 +1,13 @@
 
 const categoryCodes: Record<string, string> ={
-    electronics: "ELC",
-    furniture : "FUR",
-    tools: "TL",
-    hardware: "HRW",
-    electrical: 'ELEC'
+    ELECTRONICS: "ELC",
+    FURNITURE : "FUR",
+    TOOLS: "TL",
+    HARDWARE: "HRW",
+    ELECTRICAL: 'ELEC'
 
 }
+
 
 export function generateProductSku(category: string){
 
