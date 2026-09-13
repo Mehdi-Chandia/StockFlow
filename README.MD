@@ -221,3 +221,19 @@ and get all by filtering and pagination and injected the audit log function as w
 I learned a lot of new things in this version of Backend like mongoDB transactions, pagination, filtering, indexes, rate limiting, audit logs, stock movements, and many more.
 
 ---
+
+
+### Day 13
+
+- I'm back after ages i was busy in some stuff for a week maybe but now back at it
+- Started the frontend Phase installed required dependencies and created the four layer folder structure
+- after crating the folder structure decided the design of our dashboard as it is a huge dashboard we can't decide it all at once so will implement its design and make changes as we go 
+- created the dashboard layout file and divided the portions like sidebar navbar and main content
+- added a file in components/shared the Sidebar file as it will be a shared file
+- created the sidebar a professional working sidebar which is responsive as well.
+
+**In Progress:** Dashboard layout is in progress
+
+**Challenges:** Frontend styling and designing is always been a challenge for me i'm not a frontend guy who likes styling but i gotta do this and will accept it as a challenge.
+
+---
