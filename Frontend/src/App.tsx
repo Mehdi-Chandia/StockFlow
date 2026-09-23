@@ -1,13 +1,13 @@
 
 import './App.css'
-import DashboardLayout from './layout/DashboardLayout'
+import AppRoutes from './app/AppRoutes'
 
 function App() {
 
   return (
     <>
     <div className='min-h-screen text-white bg-[#111315]'>
-      <DashboardLayout/>
+      <AppRoutes/>
     </div>
     </>
   )

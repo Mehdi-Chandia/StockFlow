@@ -237,3 +237,20 @@ I learned a lot of new things in this version of Backend like mongoDB transactio
 **Challenges:** Frontend styling and designing is always been a challenge for me i'm not a frontend guy who likes styling but i gotta do this and will accept it as a challenge.
 
 ---
+
+### Day 14
+
+- After creating the sidebar moved to the right section of dashboard and added the navbar
+- after navbar added two more sections to right side but this time inside main content
+added a page header and then the stat cards all these are shared components
+- after these added four more sections in that main content area like inventory overview recent activites
+top products and warehouse stock level
+- used tables for the top products and inventory overview will enhance it visually but later.
+- seperated the components of main section created a seperate page dashboardPage then added those pages in it.
+- after that setup the react router dom and created few basic routes for testing
+
+**In Progress:** Next will be auth layout 
+
+**Challenges:** It was good styling experience while styling the layout and the sidebar and navbar but the main content was a bit challenging because it has multiple sections and each section has its own components so it was a bit confusing to style it properly but overall it was a good experience.
+
+---

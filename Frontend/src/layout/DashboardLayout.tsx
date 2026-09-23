@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Sidebar from "../components/shared/Sidebar";
+import Navbar from "../components/shared/Navbar";
+import PageHeader from "../components/shared/PageHeader";
+import DashboardPage from "../pages/Dashboard/DashboardPage";
 
 const DashboardLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen]=useState(false);
 
   return (
-    <div className="bg-[#111315] grid lg:grid-cols-[280px_1fr]">
+    <div className="bg-[#111315] grid lg:grid-cols-[260px_1fr] min-h-screen">
            {/* menubar for mobile */}
        <button
        onClick={()=> setIsSidebarOpen(!isSidebarOpen)}
@@ -22,13 +25,12 @@ const DashboardLayout = () => {
         <aside>
             <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
         </aside>
-        <main className="min-w-0 grid grid-rows-[100px_1fr] bg-blue-200">
-            <nav className="bg-indigo-400">
-                <h2>Stock Flow</h2>
+        <main className="min-w-0 grid grid-rows-[80px_1fr] bg-[#111315]">
+            {/* Navbar */}
+            <nav>
+                <Navbar/>
             </nav>
-            <section className="bg-amber-200">
-                main content
-            </section>
+            <DashboardPage/>
         </main>
     </div>
   )
