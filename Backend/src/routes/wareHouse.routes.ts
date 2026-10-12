@@ -6,7 +6,7 @@ const router= express.Router();
 
 
 router.post("/create", verifyToken, isAdmin, createWareHouse)
-router.get("/all",verifyToken, isAdmin, getAllWareHouses)
+router.get("/all",verifyToken, getAllWareHouses)
 router.get("/:wareHouseId", verifyToken, isAdmin, getWareHouse)
 router.patch("/:wareHouseId/status", verifyToken, isAdmin, updateWHstatus)
 router.patch("/:wareHouseId/update", verifyToken, isAdmin, updateWareHouse)

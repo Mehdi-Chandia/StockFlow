@@ -12,6 +12,7 @@ import auditLogRoutes from "./routes/auditLog.routes.js"
 import purchaseOrderRoutes from "./routes/purchaseOrder.routes.js"
 import shipmentRoutes from "./routes/shipment.routes.js"
 import { globalRateLimiter } from './middlewares/rateLimit.middleware.js'
+import cors from "cors";
 
 const app: Express= express()
 
@@ -19,10 +20,13 @@ const app: Express= express()
 app.use(express.json({limit:'16kb'}))
 app.use(cookieParser()) 
 app.use(globalRateLimiter)
-
+app.use(cors({
+    origin:process.env.FRONTEND_URL,
+    credentials: true
+}))
 
 // user route handler 
-app.use("/api/user", userRoutes)
+app.use("/api/auth", userRoutes)
 // warehouse route handler
 app.use("/api/warehouse",wareHouseRoutes)
 // product routes handler

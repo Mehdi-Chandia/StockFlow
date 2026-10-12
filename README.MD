@@ -254,3 +254,21 @@ top products and warehouse stock level
 **Challenges:** It was good styling experience while styling the layout and the sidebar and navbar but the main content was a bit challenging because it has multiple sections and each section has its own components so it was a bit confusing to style it properly but overall it was a good experience.
 
 ---
+
+
+### Day 15
+
+- After the basic setup of react router moved to design the auth module UI
+- added different pages of auth like loginPage, verify OTP page, forgot password and reset Password page.
+- added a timer for the verify opt page for resend otp code
+- added the forgot password and reset password pages with proper validation and error handling
+- also added the api calls for login, verify otp, forgot password and reset password pages
+- added the auth layout and added the routes for these pages in react router dom
+- added the create user page and its form and validation and api call for it
+- implemented and tested all the auth pages and their functionality in the frontend with backend api calls and error handling and validation
+
+**In Progress:** Auth module is in progress will add few more features to it.
+
+**Challenges:** No challenges but it was a good experience to implement the auth module in the frontend with proper validation and error handling and api calls.
+
+---

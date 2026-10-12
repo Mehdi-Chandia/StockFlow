@@ -30,7 +30,6 @@ import { AuditAction, AuditEntityType } from "../enums/auditLog.enum.js";
 
 
 // create User handler 
-
 export const createUser = AsyncHandler(async (req: Request, res: Response) => {
   const { firstName, lastName, email, role, warehouse } = req.body;
 
@@ -109,7 +108,6 @@ export const createUser = AsyncHandler(async (req: Request, res: Response) => {
 
 
 // login handler
-
 export const loginUser = AsyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   // console.log("request received ",email, password);
@@ -158,11 +156,11 @@ export const loginUser = AsyncHandler(async (req: Request, res: Response) => {
 //   send the otp code to user's email
   await sendEmail({
     to: user.email,
-    subject: "Your TechWare Verification Code",
+    subject: "Your StockFlow Verification Code",
     html:html 
     })
 
-    console.log("mail send");
+    // console.log("mail send");
     
   return res.status(200).json(
     new ApiResponse(
@@ -175,9 +173,11 @@ export const loginUser = AsyncHandler(async (req: Request, res: Response) => {
 
 
 // otp handler
-
 export const verifyOTP = AsyncHandler(async (req: Request, res: Response) => {
   const { email, otp } = req.body;
+
+  console.log("email and otp ", email, otp);
+  
 
   if (!email || !otp) {
     throw new ApiError(400, "missing required fields");
@@ -188,6 +188,8 @@ export const verifyOTP = AsyncHandler(async (req: Request, res: Response) => {
   if (!user) {
     throw new ApiError(404, "user not found");
   }
+
+  console.log("user otp ", user.otpCode);
 
   if (otp !== user.otpCode) {
     throw new ApiError(400, "invalid OTP code");
@@ -248,13 +250,46 @@ export const verifyOTP = AsyncHandler(async (req: Request, res: Response) => {
   )
 });
 
+// resend otp
+export const resendOTP= AsyncHandler(async (req: Request, res: Response)=>{
+  const {email}= req.body;
+  console.log("email for resend OTP ", email);
+  
+  if (!email) {
+    throw new ApiError(400, "email is required")
+  }
 
+  const user= await User.findOne({email})
+  if (!user) {
+    throw new ApiError(404, "user not found with given email")
+  }
+
+  const otpCode= generateOTP();
+  const otpExpiresIn= new Date(Date.now() + 5 * 60 * 1000)
+
+  user.otpCode=otpCode
+  user.otpExpiresIn=otpExpiresIn;
+  await user.save();
+
+  const html= otpEmailTemplate({firstName: user.firstName, otp: otpCode})
+
+  await sendEmail({
+    to: user.email,
+    subject: "Your StockFlow OTP code",
+    html:html
+  })
+
+  return res.status(200).json(
+    new ApiResponse(200, "OTP resend successfully",null)
+  )
+
+})
 
 // forgot password handler
-
 export const forgotPassword= AsyncHandler(async (req:Request, res:Response)=>{
   const {email} = req.body;
-
+  console.log("email received ", email);
+  
   if (!email) {
     throw new ApiError(400, "email is required ")
   }
@@ -290,11 +325,12 @@ export const forgotPassword= AsyncHandler(async (req:Request, res:Response)=>{
 
 
 // reset password handler
-
 export const resetPassword= AsyncHandler(async (req:Request, res:Response)=>{
   const{newPassword, confirmPassword}= req.body;
   const { token }= req.params;
 
+  console.log("token received ", token);
+  
   if (!token) {
     throw new ApiError(401,"token not found")
   }
@@ -340,7 +376,6 @@ export const resetPassword= AsyncHandler(async (req:Request, res:Response)=>{
 })
 
 //  refresh token
-
 export const refreshToken=AsyncHandler( async (req:Request, res: Response)=>{
   const refreshToken=req.cookies?.["refresh-token"]
 
@@ -443,7 +478,6 @@ export const refreshToken=AsyncHandler( async (req:Request, res: Response)=>{
 
 
 // logout handler
-
 export const logout= AsyncHandler ( async (req: Request, res:Response)=>{
   
   const refreshToken= req.cookies?.["refresh-token"]
@@ -483,9 +517,7 @@ export const logout= AsyncHandler ( async (req: Request, res:Response)=>{
 })
 
 
-
 // change password handler
-
 export const changePassword= AsyncHandler( async (req: Request, res: Response)=>{
   const {currentPassword, newPassword, confirmPassword}= req.body;
   const userId = req?.user?.id
@@ -533,3 +565,21 @@ export const changePassword= AsyncHandler( async (req: Request, res: Response)=>
   )
 
 })
+
+//get user
+export const getUser= AsyncHandler(async (req:Request, res:Response)=>{
+  const userId=req.user.id;
+  if (!userId) {
+    throw new ApiError(404, "user Id not found")
+  }
+
+  const user=await User.findById(userId).select('_id firstName lastName email role')
+
+  if (!user) {
+    throw new ApiError(404, "user not found")
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, "user found ", user)
+  )
+}) 
