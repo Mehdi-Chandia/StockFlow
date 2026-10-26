@@ -1,30 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Sidebar from "../components/shared/Sidebar";
 import Navbar from "../components/shared/Navbar";
-import { Outlet, useNavigate } from "react-router-dom";
-import { useAuth } from "../features/auth/context/AuthContext";
+import { Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { user, isAuthenticated, isLoading } = useAuth();
-  const navigateTo = useNavigate();
-
-  console.log("user ", user);
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      navigateTo("/login", { replace: true });
-    }
-  }, [isLoading, isAuthenticated, navigateTo]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isAuthenticated) {
-    return null;
-  }
 
   return (
     <div className="bg-[#111315] grid lg:grid-cols-[260px_1fr] min-h-screen">

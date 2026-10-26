@@ -1,6 +1,7 @@
 import {LayoutDashboard ,Package, Boxes, Warehouse, ArrowLeftRight,ClipboardList,Truck,ShoppingCart,Receipt,Layers,Users,User,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../features/auth/context/AuthContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -8,6 +9,8 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
+  const {logout}= useAuth();
+
   const mainLinks = [
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "Products", path: "/products", icon: Package },
@@ -175,6 +178,10 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           <span className="h-2 w-2 rounded-full bg-[#22C55E]" />
           <p className="text-white">online</p>
         </div>
+      </div>
+      {/* logout button */}
+      <div className="mt-3">
+        <button onClick={logout} className="px-6 py-2 bg-cyan-500 rounded-md w-full  hover:bg-cyan-600 transition-all duration-200">Logout</button>
       </div>
     </div>
   );

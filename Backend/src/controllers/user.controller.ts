@@ -476,7 +476,6 @@ export const refreshToken=AsyncHandler( async (req:Request, res: Response)=>{
 
 })
 
-
 // logout handler
 export const logout= AsyncHandler ( async (req: Request, res:Response)=>{
   

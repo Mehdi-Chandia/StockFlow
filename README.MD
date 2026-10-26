@@ -272,3 +272,19 @@ top products and warehouse stock level
 **Challenges:** No challenges but it was a good experience to implement the auth module in the frontend with proper validation and error handling and api calls.
 
 ---
+
+
+### Day 16
+
+- After the basic implementation of auth routes then move to the refresh token functionality so whenever the access token is expired the token will be refreshed automatically using the refresh token so it was a bit complex task but its done now and logout functionality is also added
+- then move to the Products module designed its UI basic components with dummy data
+- after finishing the UI connected it to the backend 
+- added the different APIs for products like create, get all, get single, update and update status
+- after that added the search and filter functionality for products and also added the pagination for it
+- then added the funtionality of view single product and also added the edit product functionality with proper validation and error handling
+
+**In Progress:** Product module is in its last stages will complete it soon.
+
+**Challenges:** The refresh token functionality was a bit complex task because it requires to handle the access token and refresh token properly and also handle the errors and validation properly but overall it was a good experience to implement it. The product module was also a bit complex because it requires to handle the different APIs and also handle the search, filter and pagination properly but overall it was a good experience to implement it.
+
+---

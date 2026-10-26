@@ -13,7 +13,7 @@ router.post("/verify-otp", otpRateLimiter, verifyOTP)
 router.post("/resend-otp", otpRateLimiter, resendOTP )
 router.post("/forgot-password", resetPasswordRateLimiter ,forgotPassword)
 router.post("/reset-password/:token", resetPassword)
-router.post("/refresh",verifyToken, refreshToken)
+router.post("/refresh", refreshToken)
 router.get("/logout", verifyToken, logout);
 router.post("/change-password", changePassword)
 router.get("/profile", verifyToken, getUser)

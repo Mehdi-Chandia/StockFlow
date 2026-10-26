@@ -5,8 +5,9 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { getUser } from "../services/authService";
+import { getUser, logoutUser } from "../services/authService";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   _id: string;
@@ -20,6 +21,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  logout: ()=> Promise<void>
 }
 
 interface AuthProviderPropType {
@@ -33,6 +35,8 @@ export const AuthProvider = ({ children }: AuthProviderPropType) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const navigateTo= useNavigate();
+
   const handleUser = async () => {
     setIsLoading(true);
     try {
@@ -40,7 +44,7 @@ export const AuthProvider = ({ children }: AuthProviderPropType) => {
 
       setIsAuthenticated(true);
       setUser(response.data);
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         // alert(error?.response?.data);
@@ -52,12 +56,48 @@ export const AuthProvider = ({ children }: AuthProviderPropType) => {
     }
   };
 
+  const logout= async ()=>{
+    try {
+      await logoutUser();
+      setUser(null)
+      setIsAuthenticated(false)
+      alert("Logged out successfully!")
+      navigateTo("/login")
+
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data);
+        alert(error.response?.data)
+      }
+    }
+  }
+
   useEffect(() => {
     handleUser();
   }, []);
 
+  useEffect(() => {
+  const handleSessionExpired = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    setIsLoading(false);
+  };
+
+  window.addEventListener(
+    "auth:session-expired",
+    handleSessionExpired
+  );
+
+  return () => {
+    window.removeEventListener(
+      "auth:session-expired",
+      handleSessionExpired
+    );
+  };
+}, []);
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, isLoading, isAuthenticated, logout }}>
       {children}
     </AuthContext.Provider>
   );

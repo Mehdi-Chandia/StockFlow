@@ -48,3 +48,10 @@ export const getUser= async ()=>{
 
     return response.data;
 }
+
+// logout user handler
+export const logoutUser= async ()=>{
+    const response= await api.get("/auth/logout")
+
+    return response?.data;
+}

@@ -11,10 +11,10 @@ import ApiResponse from "../utils/ApiResponse.js";
 import { createAuditLog } from "../utils/auditLog/createAuditLog.js";
 import { AuditEntityType } from "../enums/auditLog.enum.js";
 import { AuditAction } from "../enums/auditLog.enum.js";
+import { pagination } from "../utils/pagination.js";
 
 
 // create product handler
-
 export const createProduct= AsyncHandler( async (req:Request, res:Response)=>{
 
     const {name, description, brand, category,
@@ -99,23 +99,77 @@ export const createProduct= AsyncHandler( async (req:Request, res:Response)=>{
 })
 
 // get all products
-
 export const listProducts= AsyncHandler( async (req:Request, res:Response)=>{
+    const {search, brand, category, status}=req.query;
 
-    const products= await Product.find();
-
-    if (!products) {
-        throw new ApiError(404, "no products found")
+    console.log("query params received ",search, brand, category, status );
+    
+    const {page, limit, skip}= pagination({Page: req.query.page?.toString(), Limit: req.query.limit?.toString()})
+    
+    if (status && !Object.values(ProductStatus).includes(status as ProductStatus) ) {
+        throw new ApiError(400, "invalid status type")
     }
 
+    const filter: Record<string, unknown>={}
+
+
+   if (search) {
+  const searchTerm = search.toString().trim();
+
+  filter.$or = [
+    { name: { $regex: searchTerm, $options: "i" } },
+    { sku: { $regex: searchTerm, $options: "i" } },
+  ];
+}
+    if (category) {
+        filter.category=category;
+    }
+    if (status) {
+        filter.status=status;
+    }
+
+    console.log(filter);
+    
+
+    const products= await Product.find(filter)
+    .sort({createdAt: -1})
+    .skip(skip)
+    .limit(limit)
+
+    // console.log("db call successfull", products);
+    
+
+//     if (products.length === 0) {
+//          return res.status(200).json(
+//         new ApiResponse(200, "no products found", [])
+//     )
+//   }
+  
+
+    const totalRecords= await Product.countDocuments(filter)
+    const totalPages= Math.ceil(totalRecords/limit);
+    const hasNextPage= page < totalPages;
+    const hasPrevPage= page > 1;
+
+     const data={
+    products,
+     pagination:{
+      totalRecords,
+      page,
+      limit,
+      totalPages,
+      hasNextPage,
+      hasPrevPage
+    }
+  }
+
     return res.status(200).json(
-        new ApiResponse(200, "products found", products)
+        new ApiResponse(200, products.length > 0 ? "products found" : "no products found", data)
     )
 
 })
 
 // get single product
-
 export const getProduct= AsyncHandler( async (req:Request, res:Response)=>{
     const {productId} = req.params;
     if (!productId) {
@@ -133,9 +187,7 @@ export const getProduct= AsyncHandler( async (req:Request, res:Response)=>{
     )
 })
 
-
 // update Status
-
 export const updateProductStatus= AsyncHandler( async (req:Request, res:Response)=>{
     const {status} = req.body;
     const {productId}= req.params;
@@ -191,7 +243,6 @@ export const updateProductStatus= AsyncHandler( async (req:Request, res:Response
 
 
 // update product
-
 export const updateProduct= AsyncHandler(async (req:Request, res:Response)=>{
     const {productId}= req.params
     if (!productId) {
