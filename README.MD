@@ -288,3 +288,18 @@ top products and warehouse stock level
 **Challenges:** The refresh token functionality was a bit complex task because it requires to handle the access token and refresh token properly and also handle the errors and validation properly but overall it was a good experience to implement it. The product module was also a bit complex because it requires to handle the different APIs and also handle the search, filter and pagination properly but overall it was a good experience to implement it.
 
 ---
+
+
+### Day 17
+
+- Also added the search and filter functionality for products and also added the pagination for it
+- After the product module completed moved to the warehouse module designed its UI and added the different APIs for it like create, get all, get single, update and update status
+- designed its different components like warehouse list, warehouse details and warehouse form for create and edit
+- added the search and filter functionality for warehouse list and also added the pagination for it
+- then added the funtionality of view single warehouse
+
+**In Progress:** Warehouse module is in its last stages will complete it soon.
+
+**Challenges:** I got to learn new things like how to handle the search and filter functionality properly and also how to handle the pagination properly in frontend.
+
+---

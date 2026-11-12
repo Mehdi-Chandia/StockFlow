@@ -1,5 +1,5 @@
 import InventoryOverview from "../../components/shared/InventoryOverview"
-import PageHeader from "../../components/shared/PageHeader"
+import PageHeader from "../../components/shared/DashboardPageHeader"
 import RecentActivity from "../../components/shared/RecentActivity"
 import StatCard from "../../components/shared/StatCard"
 import TopProducts from "../../components/shared/TopProducts"

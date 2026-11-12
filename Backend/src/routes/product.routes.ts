@@ -9,7 +9,7 @@ const router= express.Router()
 router.post("/create",verifyToken, isAdmin, upload.single("productImage"), createProduct)
 router.get("/list", verifyToken, listProducts)
 router.get("/:productId", verifyToken, getProduct)
-router.patch("/:productId/staus", verifyToken, isAdmin, updateProductStatus)
+router.patch("/:productId/status", verifyToken, isAdmin, updateProductStatus)
 router.patch("/:productId/update", verifyToken, isAdmin, updateProduct)
 
 export default router;

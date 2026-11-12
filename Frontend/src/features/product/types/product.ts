@@ -26,3 +26,15 @@ export interface IProduct{
     updatedAt?: Date
 
 }
+
+export interface ICreateProduct{
+    name: string,
+    description: string,
+    brand: string,
+    category: string,
+    purchasePrice: number,
+    sellPrice: number,
+    minQty: number,
+    maxQty: number,
+    productImage: string
+}

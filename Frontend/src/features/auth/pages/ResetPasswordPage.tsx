@@ -6,7 +6,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { resetPassword } from "../services/authService";
 import axios from "axios";
 
@@ -17,6 +17,8 @@ const ResetPasswordPage = () => {
   
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading]= useState(false);
+
+  const navigateTo=useNavigate()
 
   const {
     register,
@@ -42,6 +44,7 @@ const ResetPasswordPage = () => {
       const response= await resetPassword(data, token)
       console.log(response?.data);
       alert("Password reset successfully!")
+      navigateTo("/login")
       
     } catch (error) {
       if (axios.isAxiosError(error)) {

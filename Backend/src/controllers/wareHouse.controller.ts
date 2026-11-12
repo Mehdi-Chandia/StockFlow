@@ -10,10 +10,10 @@ import { set } from "mongoose";
 import { formatZodErrors } from "../utils/formatZodErrors.js";
 import { createAuditLog } from "../utils/auditLog/createAuditLog.js";
 import { AuditAction, AuditEntityType } from "../enums/auditLog.enum.js";
+import { pagination } from "../utils/pagination.js";
 
 
 // create new WareHouse Handler
-
 export const createWareHouse= AsyncHandler( async (req:Request, res:Response)=>{
     const {name, email, phone, address, manager, city}= req.body;
     const adminId= req.user?.id;
@@ -75,17 +75,56 @@ export const createWareHouse= AsyncHandler( async (req:Request, res:Response)=>{
 })
 
 // get all wareHouses handler
-
 export const getAllWareHouses= AsyncHandler( async (req: Request, res: Response)=>{
-
-    const wareHouses= await WareHouse.find();
-
-    if (!wareHouses) {
-        throw new ApiError(404, "no warehouse found")        
+    const{search, status }= req.query;
+    if (status && !Object.values(WareHouseStatus).includes(status as WareHouseStatus)) {
+        throw new ApiError(400, "invalid status type of WareHouse")
     }
 
+    const {page, limit, skip}= pagination({Page: req.query.page?.toString(), Limit: req.query.limit?.toString()})
+    const filter: Record<string, unknown>={}
+
+    if (search) {
+  const searchTerm = search.toString().trim();
+
+  filter.$or = [
+    { name: { $regex: searchTerm, $options: "i" } },
+    { city: { $regex: searchTerm, $options: "i" } },
+    { address: { $regex: searchTerm, $options: "i" } },
+    // { manager: { $regex: searchTerm, $options: "i" } },
+    { email: { $regex: searchTerm, $options: "i" } },
+    { phone: { $regex: searchTerm, $options: "i" } },
+  ];
+ }
+
+   if (status) {
+    filter.status= status
+   }
+
+   const warehouses= await WareHouse.find(filter)
+   .sort({createdAt: -1})
+   .skip(skip)
+   .limit(limit)
+
+    const totalRecords= await WareHouse.countDocuments(filter)
+       const totalPages= Math.ceil(totalRecords/limit);
+       const hasNextPage= page < totalPages;
+       const hasPrevPage= page > 1;
+
+        const data={
+           warehouses,
+            pagination:{
+             totalRecords,
+             page,
+             limit,
+             totalPages,
+             hasNextPage,
+             hasPrevPage
+           }
+         }
+
     return res.status(200).json(
-        new ApiResponse(200, "wareHouses found ", wareHouses)
+        new ApiResponse(200, warehouses.length > 0 ? "wareHouses found" : "no warehouse found", data)
     )
 })
 

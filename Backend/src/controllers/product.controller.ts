@@ -20,6 +20,11 @@ export const createProduct= AsyncHandler( async (req:Request, res:Response)=>{
     const {name, description, brand, category,
            purchasePrice, sellPrice, minQty, maxQty} = req.body;
 
+           console.log("req received");
+           console.log("file recieved ", req.file);
+           
+           
+
     const adminId= req.user.id;     
 
          const validation= productValidationSchema.safeParse(req.body)
@@ -46,6 +51,8 @@ export const createProduct= AsyncHandler( async (req:Request, res:Response)=>{
         
         throw new ApiError(500, "failed to upload to cloudinary")
     }
+    console.log("cloudinary passed");
+    
 
     const prefix= generateProductSku(category)
     const count= await Product.countDocuments({
@@ -240,7 +247,6 @@ export const updateProductStatus= AsyncHandler( async (req:Request, res:Response
 
 
 })
-
 
 // update product
 export const updateProduct= AsyncHandler(async (req:Request, res:Response)=>{

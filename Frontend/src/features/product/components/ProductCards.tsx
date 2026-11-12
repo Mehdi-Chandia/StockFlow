@@ -1,14 +1,17 @@
+
 import {
   Package,
   PackageCheck,
   PackageX,
   CircleDollarSign,
-  TrendingUp,
-  TrendingDown,
 } from "lucide-react";
 
+import StatsCards, {
+  type IStatCard,
+} from "../../../components/common/StatCard";
+
 const ProductCards = () => {
-  const productStats = [
+  const productStats: IStatCard[] = [
     {
       title: "Total Products",
       value: "1,284",
@@ -35,6 +38,7 @@ const ProductCards = () => {
       iconColor: "text-[#F59E0B]",
       iconBg: "bg-[#F59E0B]/10",
       icon: PackageX,
+      inverseTrend: true,
     },
     {
       title: "Total Stock Value",
@@ -46,51 +50,8 @@ const ProductCards = () => {
       icon: CircleDollarSign,
     },
   ];
-  return (
-    <div className=" ">
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 ">
-        {productStats.map((stat) => {
-          const Icon = stat.icon;
 
-          const isPositive = stat.change >= 0;
-
-          const isGood =
-            stat.title === "Inactive Products" ? !isPositive : isPositive;
-
-          const TrendIcon = isPositive ? TrendingUp : TrendingDown;
-
-          return (
-            <div
-            key={stat.title}
-              className="bg-[#111B25] border border-[#25313D] flex gap-3 p-4 rounded-2xl  
-                         transition-colors duration-200 hover:border-[#3B4B5C]"
-            >
-              <Icon
-                className={`${stat.iconBg} ${stat.iconColor} rounded-2xl p-1`}
-                size={35}
-              />
-              <TrendIcon
-                size={18}
-                className={isGood ? "text-emerald-400" : "text-red-400"}
-              />
-              <div className="space-y-2">
-                <p className="text-sm text-[#94A3B8]">{stat.title}</p>
-                <p className="text-2xl font-semibold text-[#F1F5F9]">
-                  {stat.value}
-                </p>
-                <p className="text-[#10B981]">
-                    
-                    {stat.change}%</p>
-                <span className="text-xs text-[#94A3B8]">
-                  {stat.comparison}
-                </span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+  return <StatsCards stats={productStats} />;
 };
 
 export default ProductCards;

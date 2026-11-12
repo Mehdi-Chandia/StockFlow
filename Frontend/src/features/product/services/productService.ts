@@ -1,5 +1,5 @@
 import api from "../../../services/api";
-import type { IProduct } from "../types/product";
+import type { ICreateProduct, IProduct } from "../types/product";
 
 export interface ProductFilters{
     search: string,
@@ -27,7 +27,7 @@ export interface IEditProduct{
     purchasePrice?: number,
     sellPrice?: number,
     minQty?: number,
-    maxQty: number,
+    maxQty?: number,
     description?: string,
     brand?: string
 }
@@ -57,7 +57,7 @@ export const getProduct= async (productId: string)=>{
 
 // update status of product
 export const updateProductStatus= async (status: string, productId: string)=>{
-    const response= await api.patch(`/products/${productId}`, status)
+    const response= await api.patch(`/products/${productId}/status`, {status})
 
     return response.data;
 }
@@ -66,6 +66,12 @@ export const updateProductStatus= async (status: string, productId: string)=>{
 export const editProduct=async (productId: string, data: IEditProduct)=>{
     const response= await api.patch(`/products/${productId}`, data)
 
-    return response.data;
+    return response?.data;
 }
 
+// create product handlerr
+export const createProduct=async (data: FormData)=>{
+    const response= await api.post("/products/create", data)
+
+    return response?.data;
+}

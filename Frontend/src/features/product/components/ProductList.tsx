@@ -5,7 +5,7 @@ import {
   type ProductPagination,
 } from "../services/productService";
 import React, { useState, useEffect } from "react";
-import type { IProduct } from "../types/product";
+import type { IProduct, ProductStatus } from "../types/product";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,9 +13,14 @@ interface props {
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   filters: ProductFilters;
+  updatedProduct:{
+    productId: string,
+    status: ProductStatus
+  }
+  onStatusClick: (product: IProduct)=> void
 }
 
-const ProductList = ({ page, setPage, filters }: props) => {
+const ProductList = ({ page, setPage, filters, onStatusClick, updatedProduct }: props) => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [pagination, setPagination] = useState<ProductPagination | null>(null);
@@ -45,6 +50,19 @@ const ProductList = ({ page, setPage, filters }: props) => {
   useEffect(() => {
     fetchProducts();
   }, [page, filters]);
+
+  // runs whenever the status of any product gets changed to render the updated data
+useEffect(() => {
+  if (!updatedProduct) return;
+
+  setProducts((currentProducts) =>
+    currentProducts.map((product) =>
+      product._id === updatedProduct.productId
+        ? { ...product, status: updatedProduct.status }
+        : product
+    )
+  );
+}, [updatedProduct]);
 
   if (loading) {
     return(
@@ -182,20 +200,21 @@ const ProductList = ({ page, setPage, filters }: props) => {
                   <td className="px-6 py-4">
                     <div className="flex flex-col items-center gap-2">
                       <button
-                      onClick={()=> navigateTo(`/${product._id}/update`)}
+                      onClick={()=> navigateTo(`/products/${product._id}/edit`)}
                         className="px-2 border rounded-full text-sm hover:border-[#22D3EE] hover:text-[#22D3EE]
                     transition-colors text-slate-400"
                       >
                         edit
                       </button>
                       <button
+                      onClick={()=> onStatusClick(product)}
                         className="px-2 border rounded-full text-sm hover:border-[#22D3EE] hover:text-[#22D3EE]
                     transition-colors text-slate-400"
                       >
                         {product.status === "ACTIVE" ? "Inactivate" : "Activate"}
                       </button>
                       <button
-                      onClick={()=> navigateTo(`/${product._id}`)}
+                      onClick={()=> navigateTo(`/products/${product._id}`)}
                         className="px-2 border rounded-full text-sm hover:border-[#22D3EE] hover:text-[#22D3EE]
                     transition-colors text-slate-400"
                       >
@@ -221,7 +240,7 @@ const ProductList = ({ page, setPage, filters }: props) => {
         </p>
         <div className="flex items-center gap-2">
           <button
-            disabled={loading && !pagination?.hasPrevPage}
+            disabled={loading || !pagination?.hasPrevPage}
             onClick={() => setPage((current) => current - 1)}
             type="button"
             aria-label="Previous products"
@@ -235,7 +254,7 @@ const ProductList = ({ page, setPage, filters }: props) => {
           </span>
 
           <button
-            disabled={loading && !pagination?.hasNextPage}
+            disabled={loading || !pagination?.hasNextPage}
             onClick={() => setPage((current) => current + 1)}
             type="button"
             aria-label="Next products"

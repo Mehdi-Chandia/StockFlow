@@ -12,6 +12,9 @@ import CreateUserPage from "../features/user/pages/CreateUserPage"
 import ProtectedRoute from "../components/shared/ProtectedRoute"
 import ViewProductPage from "../features/product/pages/ViewProductPage"
 import EditProductPage from "../features/product/pages/EditProductPage"
+import CreateProductPage from "../features/product/pages/CreateProduct"
+import WareHousePage from "../features/warehouse/pages/WareHousePage"
+import ViewWareHousePage from "../features/warehouse/pages/ViewWareHousePage"
 
 const AppRoutes = () => {
   return (
@@ -23,9 +26,14 @@ const AppRoutes = () => {
              <Route path="dashboard" element={<DashboardPage/>}/>
              <Route path="products" element={<Product/>}/>
              <Route path="inventory" element={<Inventory/>}/>
+             <Route path="warehouse" element={<WareHousePage/>}/>
           </Route>
-          <Route path="/:productId" element={<ViewProductPage/>}/>
-          <Route path="/:productId/update" element={<EditProductPage/>}/>
+          {/* product's routes */}
+          <Route path="/products/:productId" element={<ViewProductPage/>}/>
+          <Route path="/products/:productId/edit" element={<EditProductPage/>}/>
+          <Route path="/products/create" element={<CreateProductPage/>}/>
+          {/* warehouse's routes */}
+          <Route path="/warehouses/:warehouseId" element={<ViewWareHousePage/>}/>
         </Route>
           <Route path="/login" element={<LoginPage/>}/>
           <Route path="/verify-otp" element={<VerifyOtpPage/>}/>
