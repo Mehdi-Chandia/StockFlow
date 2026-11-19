@@ -13,6 +13,8 @@ export interface WarehouseI{
     updatedAt?: Date
 }
 
+
+
 export type WareHouseStatus= "ACTIVE" | "INACTIVE"
 
 

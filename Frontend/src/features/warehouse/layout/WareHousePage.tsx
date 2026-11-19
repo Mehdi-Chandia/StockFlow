@@ -65,6 +65,8 @@ const WareHousePage = () => {
           "error while updating the warehouse status ",
           error.response?.data,
         );
+        console.log(error);
+        
         toast.error(error.response?.data);
       }
     }

@@ -5,10 +5,10 @@ import { createWareHouse, getAllWareHouses, getWareHouse, updateWareHouse, updat
 const router= express.Router();
 
 
-router.post("/create", verifyToken, isAdmin, createWareHouse)
+router.post("/create", verifyToken, createWareHouse)
 router.get("/all",verifyToken, getAllWareHouses)
-router.get("/:wareHouseId", verifyToken, isAdmin, getWareHouse)
-router.patch("/:wareHouseId/status", verifyToken, isAdmin, updateWHstatus)
-router.patch("/:wareHouseId/update", verifyToken, isAdmin, updateWareHouse)
+router.get("/:wareHouseId", verifyToken, getWareHouse)
+router.patch("/:wareHouseId/status", verifyToken, updateWHstatus)
+router.patch("/:wareHouseId/update", verifyToken, updateWareHouse)
 
 export default router;

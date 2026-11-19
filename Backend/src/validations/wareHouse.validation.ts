@@ -14,6 +14,6 @@ export const updateWHschema=z.object({
     email: z.email().toLowerCase().optional(),
     phone: z.string().optional(),
     address: z.string().optional(),
-    manager: z.string().optional()    
+    manager: z.string().optional(),    
 })
 

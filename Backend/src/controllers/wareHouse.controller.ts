@@ -129,7 +129,6 @@ export const getAllWareHouses= AsyncHandler( async (req: Request, res: Response)
 })
 
 //  get single wareHouse handler
-
 export const getWareHouse= AsyncHandler( async (req: Request, res: Response)=>{
     const {wareHouseId} = req.params;
     if (!wareHouseId) {
@@ -148,7 +147,6 @@ export const getWareHouse= AsyncHandler( async (req: Request, res: Response)=>{
 })
 
 // status update handler
-
 export const updateWHstatus= AsyncHandler( async (req:Request, res:Response)=>{
     const {status}= req.body;
     const {wareHouseId}= req.params;
@@ -198,7 +196,6 @@ export const updateWHstatus= AsyncHandler( async (req:Request, res:Response)=>{
 })
 
 // update wareHouse
-
 export const updateWareHouse= AsyncHandler( async (req:Request, res:Response)=>{
     const {wareHouseId}= req.params;
 

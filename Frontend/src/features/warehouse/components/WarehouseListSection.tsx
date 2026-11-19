@@ -1,25 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  UserRound,
-  Warehouse,
-  MoreVertical,
-  Eye,
-  Pencil,
-  Power,
-  ChevronLeft,
-  ChevronRight,
-  Loader2,
-  Search,
-} from "lucide-react";
-import type {
-  WareHouseFilters,
-  WarehouseI,
-  WareHousePagination,
-  WareHouseStatus,
-} from "../types/warehouse";
+import { MapPin, Phone, Mail, UserRound, Warehouse, MoreVertical, Eye, Pencil,
+   Power, ChevronLeft, ChevronRight, Loader2, Search } from "lucide-react";
+import type { WareHouseFilters, WarehouseI, WareHousePagination, WareHouseStatus} from "../types/warehouse";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { getWareHouses } from "../services/warehouseService";
@@ -257,6 +239,7 @@ const WarehouseListSection = ({
                         </button>
 
                         <button
+                        onClick={()=> navigate(`/warehouses/${warehouse._id}/edit`)}
                           type="button"
                           title="Edit warehouse"
                           className="p-2 rounded-lg text-[#94A3B8] hover:text-[#22D3EE] hover:bg-[#22D3EE]/10 transition-colors"

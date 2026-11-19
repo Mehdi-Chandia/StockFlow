@@ -4,7 +4,7 @@ import { StockMovementReason, StockMovementType } from "../enums/stockMov.enums.
 export const inventoryValidationSchema=z.object({
     productId: z.string(),
     warehouseId: z.string(),
-    quantity: z.number().positive(),
+    quantity: z.number(),
     reorderlevel: z.number().positive(),
     
 })

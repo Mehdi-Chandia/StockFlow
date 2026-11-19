@@ -42,7 +42,7 @@ const CreateProductPage = () => {
     },
   });
 
-  // Add your API call here.
+  // API call
   const onSubmit = async (data: CreateProductFormData) => {
     if (!image) {
       alert("Please select a product image");

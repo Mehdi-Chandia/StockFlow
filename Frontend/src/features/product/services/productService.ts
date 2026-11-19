@@ -48,6 +48,19 @@ export const getProducts= async (page: number, limit: number, filters: ProductFi
     return response.data.data;
 }
 
+// list products without any user querys
+export const listProducts= async ():
+ Promise<ProductResponse>=>{
+    const response= await api.get("/products/list",{
+        params: {
+      page: 1,
+      limit: 50
+    },
+ })
+
+    return response.data.data;
+}
+
 // get single product handler
 export const getProduct= async (productId: string)=>{
     const response= await api.get(`/products/${productId}`)

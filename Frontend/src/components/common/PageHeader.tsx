@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react"
+import { Layers, type LucideIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 interface PageHeaderProps{
@@ -21,7 +21,15 @@ const PageHeader = ({icon: Icon, title, description, buttonPath, buttonText}: Pa
          </div>
             <p className="text-[#94A3B8] mt-2 text-sm">{description}</p>
         </div>
-        <input type="date"  />
+         <div className="flex gap-2 items-center p-2">
+        <span>
+          <Layers size={20} className="text-[#22D3EE]" />
+        </span>
+
+        <h3 className="text-[#22D3EE] text-xl font-bold">
+          <span className="text-white">Stock</span> Flow
+        </h3>
+      </div>
         <button 
         onClick={()=> navigateTo(buttonPath)}
          className="bg-[#06B6D4] px-4 py-2 rounded-md hover:bg-[#06B6D4]/70 

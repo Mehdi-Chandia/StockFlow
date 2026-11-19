@@ -303,3 +303,20 @@ top products and warehouse stock level
 **Challenges:** I got to learn new things like how to handle the search and filter functionality properly and also how to handle the pagination properly in frontend.
 
 ---
+
+
+### Day 18
+
+- After the warehouse module completed moved to the inventory module designed its UI and added the different APIs for it like create, get all, get single, update and update status
+- Designed its different components like inventory list, inventory search and filter, inventory details and inventory form for edit
+- added the search and filter functionality for inventory list and also added the pagination for it
+also added the view single inventory
+- then added the adjust inventory functionality with proper stock movement and audit log functionality
+- in the end added the create inventory page with proper listing of products and warehouses and to choose from dropdown to create a new inventory for them
+
+
+**In Progress:** Inventory module is complete now.
+
+**Challenges:** Again it was the same thing like search and filter and pagination but it was a good experience to implement it again.
+
+---

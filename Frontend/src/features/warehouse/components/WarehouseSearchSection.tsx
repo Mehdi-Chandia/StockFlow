@@ -1,11 +1,6 @@
 
 import { useEffect, useState } from "react";
-import {
-  Search,
-  SlidersHorizontal,
-  ChevronDown,
-  X,
-} from "lucide-react";
+import {Search, SlidersHorizontal, ChevronDown, X,} from "lucide-react";
 import type { WareHouseFilters } from "../types/warehouse";
 
 interface WarehouseSearchSectionProps {

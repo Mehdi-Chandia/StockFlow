@@ -1,8 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import DashboardLayout from "../layout/DashboardLayout"
-import Home from "../pages/Home/Home"
 import Product from "../features/product/pages/ProductPage"
-import Inventory from "../features/inventory/pages/Inventory"
+import Inventory from "../features/inventory/layout/Inventory"
 import DashboardPage from "../pages/Dashboard/DashboardPage"
 import LoginPage from "../features/auth/pages/LoginPage"
 import VerifyOtpPage from "../features/auth/pages/VerifyOtpPage"
@@ -13,8 +12,13 @@ import ProtectedRoute from "../components/shared/ProtectedRoute"
 import ViewProductPage from "../features/product/pages/ViewProductPage"
 import EditProductPage from "../features/product/pages/EditProductPage"
 import CreateProductPage from "../features/product/pages/CreateProduct"
-import WareHousePage from "../features/warehouse/pages/WareHousePage"
+import WareHousePage from "../features/warehouse/layout/WareHousePage"
 import ViewWareHousePage from "../features/warehouse/pages/ViewWareHousePage"
+import EditWareHousePage from "../features/warehouse/pages/EditWareHousePage"
+import CreateWareHousePage from "../features/warehouse/pages/CreateWareHousePage"
+import ViewInventoryPage from "../features/inventory/pages/ViewInventoryPage"
+import EditInventoryPage from "../features/inventory/pages/AdjustInventoryPage"
+import CreateInventoryPage from "../features/inventory/pages/CreateInventoryPage"
 
 const AppRoutes = () => {
   return (
@@ -34,6 +38,13 @@ const AppRoutes = () => {
           <Route path="/products/create" element={<CreateProductPage/>}/>
           {/* warehouse's routes */}
           <Route path="/warehouses/:warehouseId" element={<ViewWareHousePage/>}/>
+          <Route path="/warehouses/:warehouseId/edit" element={<EditWareHousePage/>}/>
+          <Route path="/warehouses/create" element={<CreateWareHousePage/>}/>
+          {/* inventory routes */}
+          <Route path="/inventory/:inventoryId" element={<ViewInventoryPage/>}/>
+          <Route path="/inventory/:inventoryId/edit" element={<EditInventoryPage/>}/>
+          <Route path="/inventory/create" element={<CreateInventoryPage/>}/>
+
         </Route>
           <Route path="/login" element={<LoginPage/>}/>
           <Route path="/verify-otp" element={<VerifyOtpPage/>}/>
@@ -45,4 +56,4 @@ const AppRoutes = () => {
   )
 }
 
-export default AppRoutes
+export default AppRoutes;

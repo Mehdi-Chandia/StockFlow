@@ -11,6 +11,9 @@ import { StockMovementReferenceType, StockMovementType } from "../enums/stockMov
 import createStockMovement from "../utils/stockMovement/stockMovement.util.js";
 import { AuditAction, AuditEntityType } from "../enums/auditLog.enum.js";
 import { createAuditLog } from "../utils/auditLog/createAuditLog.js";
+import { pagination } from "../utils/pagination.js";
+import { record } from "zod";
+import type { PipelineStage } from "mongoose";
 
 
 // create inventory handler
@@ -322,4 +325,100 @@ await createAuditLog(auditLogData);
         new ApiResponse(200, "inventory adjusted successfully! ", updated)
     )
 
+})
+
+
+// get inventory by filtering and searching using aggregation pipeline
+export const getInventories= AsyncHandler(async (req: Request, res: Response)=>{
+    const {search, status}= req.query;
+
+    const {page, limit, skip}=pagination({Page: req.query.page?.toString(), Limit: req.query.limit?.toString()})
+
+    if (status && !Object.values(InventoryStatus).includes(status as InventoryStatus)) {
+        throw new ApiError(400, "invalid inventory status")
+    }
+
+    const filter: Record<string, unknown>={}
+    if (status) {
+        filter.status= status
+    }
+   const searchTerm = search?.toString().trim();
+    
+    const pipeline: PipelineStage[]=[
+        {
+            $match: filter
+        },
+        {
+            $lookup:{
+                from:"products",
+                localField:"productId",
+                foreignField:"_id",
+                as:"productDetails"
+            }
+        },
+        {
+            $lookup:{
+                from:"warehouses",
+                localField:"warehouseId",
+                foreignField:"_id",
+                as:"warehouseDetails"
+            }
+        },
+        {
+             $unwind: "$productDetails"
+        },
+        {
+             $unwind: "$warehouseDetails"
+        }
+    ]
+
+    if (searchTerm) {
+        pipeline.push({
+            $match:{
+                $or:[
+                    {"productDetails.name":{$regex: searchTerm, $options: "i"}},
+                    {"productDetails.sku":{$regex: searchTerm, $options: "i"}},
+                    {"warehouseDetails.name":{$regex: searchTerm, $options: "i"}},
+                    {"warehouseDetails.city":{$regex: searchTerm, $options: "i"}},
+                ]
+            }
+        })
+    }
+    pipeline.push(
+        {
+            $sort:{createdAt: -1}
+        },
+        {
+            $facet:{
+                data:[
+                    {$skip: skip},
+                    {$limit: limit}
+                ],
+                totalCount: [
+                { $count: "total" }
+                ]
+            },
+        }
+    )
+
+
+    const result= await Inventory.aggregate(pipeline)
+    const inventories= result[0]?.data || []
+    const totalItems= result[0]?.totalCount[0]?.total || 0
+    const totalPages= Math.ceil(totalItems / limit)
+
+    return res.status(200).json(
+    new ApiResponse(200, "Inventories fetched successfully", {
+        inventories,
+        pagination: {
+            page,
+            limit,
+            totalItems,
+            totalPages,
+            hasNextPage: page < totalPages,
+            hasPrevPage: page > 1
+        }
+    })
+);
+    
 })

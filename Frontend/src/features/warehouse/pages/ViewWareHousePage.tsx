@@ -115,14 +115,14 @@ const ViewWareHousePage = () => {
 
           <div>
             <p className="text-sm text-[#94A3B8] mb-2">Warehouse Name</p>
-            <p className="text-white font-medium break-words">
+            <p className="text-white font-medium ">
               {warehouse.name || "Not provided"}
             </p>
           </div>
 
           <div>
             <p className="text-sm text-[#94A3B8] mb-2">City</p>
-            <p className="text-white font-medium break-words">
+            <p className="text-white font-medium ">
               {warehouse.city || "Not provided"}
             </p>
           </div>
@@ -136,14 +136,14 @@ const ViewWareHousePage = () => {
 
           <div>
             <p className="text-sm text-[#94A3B8] mb-2">Phone Number</p>
-            <p className="text-white font-medium break-words">
+            <p className="text-white font-medium ">
               {warehouse.phone || "Not provided"}
             </p>
           </div>
 
           <div>
             <p className="text-sm text-[#94A3B8] mb-2">Manager</p>
-            <p className="text-white font-medium break-words">
+            <p className="text-white font-medium ">
               {warehouse.manager || "Not assigned"}
             </p>
           </div>
@@ -157,7 +157,7 @@ const ViewWareHousePage = () => {
 
           <div className="sm:col-span-2">
             <p className="text-sm text-[#94A3B8] mb-2">Full Address</p>
-            <p className="text-white font-medium break-words leading-relaxed">
+            <p className="text-white font-medium leading-relaxed">
               {warehouse.address || "No address provided"}
             </p>
           </div>
